@@ -37,8 +37,6 @@ def connectDB():
         logger.error("ERROR: Unexpected error: Could not connect to MySql instance.")
 
 
-
-
 def getClients():
     try:
         connectDB()
