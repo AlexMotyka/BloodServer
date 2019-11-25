@@ -11,22 +11,23 @@ connection = None
 servers = []
 
 
-
-# print a nice greeting.
 def sayHello():
     return '<p>GIVE ME YOUR BLOOD!</p>\n'
 
+
 def connectDB():
+    # this method creates a connection if an open one does not yet exist
+    # this method should be called whenever you want to execute a query
     global connection
     try:
-        if(connection is None):
+        if connection is None:
             connection = pymysql.connect(host='bloodbasedb.cr4zxbqsmtxm.us-east-1.rds.amazonaws.com',
                                          user='root',
                                          password='capstone2019',
                                          port=3306,
                                          db='bloodbase',
                                          connect_timeout=5)
-        elif(not connection.open):
+        elif not connection.open:
             connection = pymysql.connect(host='bloodbasedb.cr4zxbqsmtxm.us-east-1.rds.amazonaws.com',
                                          user='root',
                                          password='capstone2019',
