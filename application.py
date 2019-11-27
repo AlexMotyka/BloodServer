@@ -92,6 +92,21 @@ def createClient():
         return response
 
 
+def authenticateClient():
+    password = request.args.get('password')
+    email = request.args.get('email')
+
+    query = "SELECT * FROM bloodbase.Clients WHERE Password = '{}' AND Email = '{}';".format(password, email)
+
+    repsonse = executeGetQuery(query)
+    decodedRes = json.loads(repsonse)
+
+    if len(decodedRes) == 0:
+        return "False"
+    else:
+        return "True"
+
+
 def checkIfClientExists(email):
     query = "SELECT Email FROM Clients WHERE Email = '{}';".format(email)
     result = executeGetQuery(query)
@@ -197,6 +212,7 @@ application = Flask(__name__)
 application.add_url_rule('/', 'index', (lambda: sayHello()))
 
 application.add_url_rule('/getClients', 'clients', (lambda: getClients()))
+application.add_url_rule('/authenticate', 'authenticate', (lambda: authenticateClient()))
 application.add_url_rule('/createClient', 'client', (lambda: createClient()), methods=['POST'])
 
 application.add_url_rule('/createBP', 'bp', (lambda: createBPActivity()), methods=['POST'])
