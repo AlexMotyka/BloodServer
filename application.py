@@ -128,6 +128,20 @@ def getMedications():
 
     return response
 
+def getMedicationDetails():
+    clientMedID = request.args.get('clientMedID')
+
+    query = "SELECT * FROM `bloodbase`.`MedSchedule` WHERE `ClientMedID` = {}".format(clientMedID)
+
+    response = executeGetQuery(query)
+
+    return response
+
+
+def updateMedication():
+
+    clientMedID = request.form.get('id')
+
 
 # EB looks for an 'application' callable by default.
 application = Flask(__name__)
@@ -142,6 +156,7 @@ application.add_url_rule('/createClient', 'client', (lambda: createClient()), me
 application.add_url_rule('/createBP', 'bp', (lambda: createBPActivity()), methods=['POST'])
 
 application.add_url_rule('/getMeds', 'meds', (lambda: getMedications()))
+application.add_url_rule('/getMedDetails', 'medDetails', (lambda: getMedicationDetails()))
 
 # run the app.
 if __name__ == "__main__":
