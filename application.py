@@ -148,11 +148,31 @@ def getMedicationDetails():
     return response
 
 
+def createMedication():
+
+    clientMedId = request.form.get('clientMedId')
+    clientId = request.form.get('clientId')
+    medId = request.form.get('medId')
+    time = request.form.get('time')
+    days = request.form.get('days')
+    notes = request.form.get('notes')
+    # TODO: figure out how this will be stored in the db
+    startDate = request.form.get('startDate')
+    # TODO: not sure how to store this in the database
+    currentlyTaking = request.form.get('currentlyTaking')
+
+    query = """INSERT INTO `bloodbase`.`MedSchedule` (`ClientMedID`, `MedID`, `Time`, `Days`, `Notes`, `StartDate`,
+            `currentlyTaking`) VALUES ({}, {}, '{}', '{}', '{}', '{}', '{}');""".format(clientMedId, medId, time, days, notes, startDate, currentlyTaking)
+
+    print("Query: " + query, file=sys.stdout)
+    response = executePostQuery(query)
+    return response
+
 def updateMedication():
 
     clientMedId = request.form.get('clientMedId')
     clientId = request.form.get('clientId')
-    medId = request.form.get('medID')
+    medId = request.form.get('medId')
     time = request.form.get('time')
     # TODO: figure out how this will be stored in the db
     days = request.form.get('days')
@@ -183,6 +203,7 @@ application.add_url_rule('/createBP', 'bp', (lambda: createBPActivity()), method
 application.add_url_rule('/getBP', 'getBp', (lambda: getBP()))
 
 application.add_url_rule('/updateMed', 'medUpdate', (lambda: updateMedication()), methods=['POST'])
+application.add_url_rule('/createMed', 'medCreate', (lambda: createMedication()), methods=['POST'])
 application.add_url_rule('/getMeds', 'meds', (lambda: getMedications()))
 application.add_url_rule('/getMedDetails', 'medDetails', (lambda: getMedicationDetails()))
 
