@@ -55,6 +55,7 @@ def executePostQuery(query):
 
 
 def executeGetQuery(query):
+    print("Query: " + query,file=sys.stdout)
     try:
         connectDB()
         with connection.cursor() as cur:
@@ -117,6 +118,17 @@ def createBPActivity():
     return response
 
 
+def getMedications():
+
+    clientID = request.args.get('id')
+
+    query = "SELECT * FROM bloodbase.MedSchedule WHERE ClientMedID = '{}';".format(clientID)
+
+    response = executeGetQuery(query)
+
+    return response
+
+
 # EB looks for an 'application' callable by default.
 application = Flask(__name__)
 
@@ -128,6 +140,8 @@ application.add_url_rule('/getClients', 'clients', (lambda: getClients()))
 application.add_url_rule('/createClient', 'client', (lambda: createClient()), methods=['POST'])
 
 application.add_url_rule('/createBP', 'bp', (lambda: createBPActivity()), methods=['POST'])
+
+application.add_url_rule('/getMeds', 'meds', (lambda: getMedications()))
 
 # run the app.
 if __name__ == "__main__":
