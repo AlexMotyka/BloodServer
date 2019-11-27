@@ -100,6 +100,23 @@ def checkIfClientExists(email):
     else:
         return True
 
+
+def createBPActivity():
+
+    bp = request.form.get('bp')
+    clientID = request.form.get('id')
+    timestamp = request.form.get('timestamp')
+    systolic = request.form.get('systolic')
+    diastolic = request.form.get('diastolic')
+
+    query = """INSERT INTO `bloodbase`.`BloodPressure` (`BPID`, `ClientID`, `Time`, `Systolic`, `Diastolic`) 
+                    VALUES ({}, {}, {}, {}, {});""".format(bp, clientID, timestamp, systolic, diastolic)
+
+    response = executePostQuery(query)
+
+    return response
+
+
 # EB looks for an 'application' callable by default.
 application = Flask(__name__)
 
@@ -109,6 +126,8 @@ application.add_url_rule('/', 'index', (lambda: sayHello()))
 application.add_url_rule('/getClients', 'clients', (lambda: getClients()))
 
 application.add_url_rule('/createClient', 'client', (lambda: createClient()), methods=['POST'])
+
+application.add_url_rule('/createBP', 'bp', (lambda: createBPActivity()), methods=['POST'])
 
 # run the app.
 if __name__ == "__main__":
