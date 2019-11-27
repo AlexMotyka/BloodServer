@@ -102,9 +102,9 @@ def authenticateClient():
     decodedRes = json.loads(repsonse)
 
     if len(decodedRes) == 0:
-        return "False"
+        return "false"
     else:
-        return "True"
+        return "true"
 
 
 def checkIfClientExists(email):
