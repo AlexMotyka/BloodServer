@@ -140,7 +140,24 @@ def getMedicationDetails():
 
 def updateMedication():
 
-    clientMedID = request.form.get('id')
+    clientMedID = request.form.get('clientMedId')
+    clientID = request.form.get('clientId')
+    medID = request.form.get('medID')
+    time = request.form.get('time')
+    # TODO: figure out how this will be stored in the db
+    days = request.form.get('days')
+    notes = request.form.get('notes')
+    # TODO: figure out how this will be stored in the db
+    startDate = request.form.get('startDate')
+    currentlyTaking = request.form.get('currentlyTaking')
+
+    query = """UPDATE `bloodbase`.`MedSchedule` SET `ClientMedID` = '{}',
+            `MedID` = '{}', `Time` = '{}', `Days` = '{}', `Notes` = '{}', `StartDate` = '{}',
+            `currentlyTaking` = '{}' WHERE `ClientMedID` = '{}';""".format(clientMedID, medID, time, days,
+                                                                           notes, startDate, currentlyTaking, clientID)
+
+    response = executePostQuery(query)
+    return response
 
 
 # EB looks for an 'application' callable by default.
@@ -154,9 +171,11 @@ application.add_url_rule('/getClients', 'clients', (lambda: getClients()))
 application.add_url_rule('/createClient', 'client', (lambda: createClient()), methods=['POST'])
 
 application.add_url_rule('/createBP', 'bp', (lambda: createBPActivity()), methods=['POST'])
+application.add_url_rule('/updateMed', 'medUpdate', (lambda: updateMedication()), methods=['POST'])
 
 application.add_url_rule('/getMeds', 'meds', (lambda: getMedications()))
 application.add_url_rule('/getMedDetails', 'medDetails', (lambda: getMedicationDetails()))
+
 
 # run the app.
 if __name__ == "__main__":
