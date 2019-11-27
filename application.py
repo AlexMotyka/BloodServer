@@ -105,33 +105,43 @@ def checkIfClientExists(email):
 def createBPActivity():
 
     bp = request.form.get('bp')
-    clientID = request.form.get('id')
+    clientId = request.form.get('clientId')
     timestamp = request.form.get('timestamp')
     systolic = request.form.get('systolic')
     diastolic = request.form.get('diastolic')
 
     query = """INSERT INTO `bloodbase`.`BloodPressure` (`BPID`, `ClientID`, `Time`, `Systolic`, `Diastolic`) 
-                    VALUES ({}, {}, {}, {}, {});""".format(bp, clientID, timestamp, systolic, diastolic)
+                    VALUES ({}, {}, {}, {}, {});""".format(bp, clientId, timestamp, systolic, diastolic)
 
     response = executePostQuery(query)
 
     return response
 
 
+def getBP():
+
+    clientId = request.args.get('clientId')
+
+    query = "SELECT * FROM bloodbase.BloodPressure WHERE ClientID = {}".format(clientId)
+
+    response = executeGetQuery(query)
+    return response
+
+
 def getMedications():
 
-    clientID = request.args.get('id')
+    clientId = request.args.get('id')
 
-    query = "SELECT * FROM bloodbase.MedSchedule WHERE ClientMedID = '{}';".format(clientID)
+    query = "SELECT * FROM bloodbase.MedSchedule WHERE ClientMedID = '{}';".format(clientId)
 
     response = executeGetQuery(query)
 
     return response
 
 def getMedicationDetails():
-    clientMedID = request.args.get('clientMedID')
+    clientMedId = request.args.get('clientMedId')
 
-    query = "SELECT * FROM `bloodbase`.`MedSchedule` WHERE `ClientMedID` = {}".format(clientMedID)
+    query = "SELECT * FROM `bloodbase`.`MedSchedule` WHERE `ClientMedID` = {}".format(clientMedId)
 
     response = executeGetQuery(query)
 
@@ -140,9 +150,9 @@ def getMedicationDetails():
 
 def updateMedication():
 
-    clientMedID = request.form.get('clientMedId')
-    clientID = request.form.get('clientId')
-    medID = request.form.get('medID')
+    clientMedId = request.form.get('clientMedId')
+    clientId = request.form.get('clientId')
+    medId = request.form.get('medID')
     time = request.form.get('time')
     # TODO: figure out how this will be stored in the db
     days = request.form.get('days')
@@ -153,8 +163,8 @@ def updateMedication():
 
     query = """UPDATE `bloodbase`.`MedSchedule` SET `ClientMedID` = '{}',
             `MedID` = '{}', `Time` = '{}', `Days` = '{}', `Notes` = '{}', `StartDate` = '{}',
-            `currentlyTaking` = '{}' WHERE `ClientMedID` = '{}';""".format(clientMedID, medID, time, days,
-                                                                           notes, startDate, currentlyTaking, clientID)
+            `currentlyTaking` = '{}' WHERE `ClientMedID` = '{}';""".format(clientMedId, medId, time, days,
+                                                                           notes, startDate, currentlyTaking, clientId)
 
     response = executePostQuery(query)
     return response
@@ -167,12 +177,12 @@ application = Flask(__name__)
 application.add_url_rule('/', 'index', (lambda: sayHello()))
 
 application.add_url_rule('/getClients', 'clients', (lambda: getClients()))
-
 application.add_url_rule('/createClient', 'client', (lambda: createClient()), methods=['POST'])
 
 application.add_url_rule('/createBP', 'bp', (lambda: createBPActivity()), methods=['POST'])
-application.add_url_rule('/updateMed', 'medUpdate', (lambda: updateMedication()), methods=['POST'])
+application.add_url_rule('/getBP', 'getBp', (lambda: getBP()))
 
+application.add_url_rule('/updateMed', 'medUpdate', (lambda: updateMedication()), methods=['POST'])
 application.add_url_rule('/getMeds', 'meds', (lambda: getMedications()))
 application.add_url_rule('/getMedDetails', 'medDetails', (lambda: getMedicationDetails()))
 
