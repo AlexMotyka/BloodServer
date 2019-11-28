@@ -84,8 +84,8 @@ def getClients():
 
 
 def getClient():
-	email = request.args.get('email')
-    query = "SELECT * FROM Clients WHERE Email = {}".format(email)
+    email = request.args.get('email')
+    query = "SELECT * FROM Clients WHERE Email = '{}'".format(email)
     response = executeGetQuery(query)
     return response
 
@@ -237,7 +237,7 @@ application = Flask(__name__)
 application.add_url_rule('/', 'index', (lambda: sayHello()))
 
 application.add_url_rule('/getClients', 'clients', (lambda: getClients()))
-application.add_url_rule('/getClient', 'getClient', (lambda: getName()))
+application.add_url_rule('/getClient', 'getClient', (lambda: getClient()))
 application.add_url_rule('/authenticate', 'authenticate', (lambda: authenticateClient()))
 application.add_url_rule('/createClient', 'client', (lambda: createClient()), methods=['POST'])
 
