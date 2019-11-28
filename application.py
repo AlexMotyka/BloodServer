@@ -171,6 +171,15 @@ def getMedications():
 
     return response
 
+def getMedicationNames():
+    clientId = request.args.get('id')
+
+    query = "SELECT MedName FROM bloodbase.MedSchedule WHERE ClientId = '{}';".format(clientId)
+
+    response = executeGetQuery(query)
+
+    return response
+
 def getMedicationDetails():
     clientMedId = request.args.get('clientMedId')
 
@@ -251,6 +260,7 @@ application.add_url_rule('/getBP', 'getBp', (lambda: getBP()))
 application.add_url_rule('/updateMed', 'medUpdate', (lambda: updateMedication()), methods=['POST'])
 application.add_url_rule('/createMed', 'medCreate', (lambda: createMedication()), methods=['POST'])
 application.add_url_rule('/getMeds', 'meds', (lambda: getMedications()))
+application.add_url_rule('/getMedNames', 'medNames', (lambda: getMedicationNames()))
 application.add_url_rule('/getMedDetails', 'medDetails', (lambda: getMedicationDetails()))
 
 
