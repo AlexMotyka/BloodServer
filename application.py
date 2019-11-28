@@ -129,6 +129,10 @@ def checkIfClientExists(email):
         return False
     else:
         return True
+		
+
+def updateClient(clientID):
+	query = "
 
 
 def createBPActivity():
@@ -149,9 +153,9 @@ def createBPActivity():
 
 def getBP():
 
-    email = request.args.get('email')
+    clientID = request.args.get('clientID')
 
-    query = "SELECT * FROM bloodbase.BloodPressure WHERE Email = {}".format(email)
+    query = "SELECT * FROM bloodbase.BloodPressure WHERE ClientID = {}".format(clientID)
 
     response = executeGetQuery(query)
     return response
