@@ -131,8 +131,6 @@ def checkIfClientExists(email):
         return True
 		
 
-def updateClient(clientID):
-	query = "
 
 
 def createBPActivity():
