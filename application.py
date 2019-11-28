@@ -76,6 +76,13 @@ def getClients():
     return response
 
 
+def getClient():
+	email = request.args.get('email')
+    query = "SELECT * FROM Clients WHERE Email = {}".format(email)
+    response = executeGetQuery(query)
+    return response
+
+
 def createClient():
     name = request.form.get('name')
     email = request.form.get('email')
@@ -135,9 +142,9 @@ def createBPActivity():
 
 def getBP():
 
-    clientId = request.args.get('clientId')
+    email = request.args.get('email')
 
-    query = "SELECT * FROM bloodbase.BloodPressure WHERE ClientID = {}".format(clientId)
+    query = "SELECT * FROM bloodbase.BloodPressure WHERE Email = {}".format(email)
 
     response = executeGetQuery(query)
     return response
@@ -212,6 +219,7 @@ application = Flask(__name__)
 application.add_url_rule('/', 'index', (lambda: sayHello()))
 
 application.add_url_rule('/getClients', 'clients', (lambda: getClients()))
+application.add_url_rule('/getClient', 'getClient', (lambda: getName()))
 application.add_url_rule('/authenticate', 'authenticate', (lambda: authenticateClient()))
 application.add_url_rule('/createClient', 'client', (lambda: createClient()), methods=['POST'])
 
