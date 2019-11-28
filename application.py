@@ -75,6 +75,8 @@ def executeGetQuery(query):
 def myconverter(o):
     if isinstance(o, datetime.datetime):
         return o.__str__()
+    if isinstance(o, datetime.time):
+        return o.__str__()
 
 
 def getClients():
@@ -161,7 +163,7 @@ def getMedications():
 
     clientId = request.args.get('id')
 
-    query = "SELECT * FROM bloodbase.MedSchedule WHERE ClientMedID = '{}';".format(clientId)
+    query = "SELECT * FROM bloodbase.MedSchedule WHERE ClientId = '{}';".format(clientId)
 
     response = executeGetQuery(query)
 
