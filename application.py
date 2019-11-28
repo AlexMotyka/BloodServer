@@ -192,7 +192,13 @@ def getMedicationNames():
     query = "SELECT MedName FROM bloodbase.MedSchedule WHERE ClientId = '{}';".format(clientId)
 
     response = executeGetQuery(query)
-    return response
+    result = json.loads(response)
+    formattedResponse = []
+    for element in result:
+        formattedResponse.append(element[0])
+
+    stringResponse = json.dumps(formattedResponse)
+    return stringResponse
 
 def getMedicationDetails():
     clientMedId = request.args.get('clientMedId')
@@ -267,6 +273,13 @@ application.add_url_rule('/getClients', 'clients', (lambda: getClients()))
 application.add_url_rule('/getClient', 'getClient', (lambda: getClient()))
 application.add_url_rule('/authenticate', 'authenticate', (lambda: authenticateClient()))
 application.add_url_rule('/createClient', 'client', (lambda: createClient()), methods=['POST'])
+
+
+def updateClient():
+    pass
+
+
+application.add_url_rule('/updateClient', 'updateClient', (lambda: updateClient()), methods=['POST'])
 
 application.add_url_rule('/createBP', 'bp', (lambda: createBPActivity()), methods=['POST'])
 application.add_url_rule('/getBP', 'getBp', (lambda: getBP()))
