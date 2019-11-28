@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Flask
 from flask import request
 from dotenv import load_dotenv
@@ -63,11 +65,16 @@ def executeGetQuery(query):
             result = cur.fetchall()
             cur.close()
             connection.close()
-            jsonResponse = json.dumps(result)
+            jsonResponse = json.dumps(result, default=myconverter)
             return jsonResponse
     except Exception as e:
         print(e)
         return "400: " + e
+
+
+def myconverter(o):
+    if isinstance(o, datetime.datetime):
+        return o.__str__()
 
 
 def getClients():
@@ -119,14 +126,14 @@ def checkIfClientExists(email):
 
 def createBPActivity():
 
-    bp = request.form.get('bp')
+    # bp = request.form.get('bp')
     clientId = request.form.get('clientId')
     timestamp = request.form.get('timestamp')
     systolic = request.form.get('systolic')
     diastolic = request.form.get('diastolic')
 
-    query = """INSERT INTO `bloodbase`.`BloodPressure` (`BPID`, `ClientID`, `Time`, `Systolic`, `Diastolic`) 
-                    VALUES ({}, {}, {}, {}, {});""".format(bp, clientId, timestamp, systolic, diastolic)
+    query = """INSERT INTO `bloodbase`.`BloodPressure` (`ClientID`, `Time`, `Systolic`, `Diastolic`) 
+                    VALUES ({}, {}, {}, {});""".format(clientId, timestamp, systolic, diastolic)
 
     response = executePostQuery(query)
 
@@ -165,19 +172,30 @@ def getMedicationDetails():
 
 def createMedication():
 
-    clientMedId = request.form.get('clientMedId')
     clientId = request.form.get('clientId')
     medId = request.form.get('medId')
-    time = request.form.get('time')
-    days = request.form.get('days')
-    notes = request.form.get('notes')
-    # TODO: figure out how this will be stored in the db
-    startDate = request.form.get('startDate')
-    # TODO: not sure how to store this in the database
-    currentlyTaking = request.form.get('currentlyTaking')
+    medName = request.form.get('medName')
 
-    query = """INSERT INTO `bloodbase`.`MedSchedule` (`ClientMedID`, `MedID`, `Time`, `Days`, `Notes`, `StartDate`,
-            `currentlyTaking`) VALUES ({}, {}, '{}', '{}', '{}', '{}', '{}');""".format(clientMedId, medId, time, days, notes, startDate, currentlyTaking)
+    time = request.form.get('time')
+
+    startingTime = datetime.datetime.now()
+    currentlyTaking = 1;
+
+    sun = request.form.get('sun')
+    mon = request.form.get('mon')
+    tues = request.form.get('tues')
+    wed = request.form.get('wed')
+    thurs = request.form.get('thurs')
+    fri = request.form.get('fri')
+    sat = request.form.get('sat')
+
+    # TODO: add in when Anthea adds notes field to new medication activity
+    # notes = request.form.get('notes')
+
+    query = """INSERT INTO `bloodbase`.`MedSchedule` (`ClientId`, `MedID`, `MedName`, `Time`, `StartDate`, 
+    `currentlyTaking`, `Sun`, `Mon`, `Tues`, `Wed`, `Thur`, `Fri`, `Sat`) 
+    VALUES ({}, {}, '{}', '{}', '{}', {}, {}, {}, {}, {}, {}, {}, {});
+    """.format(clientId, medId, medName, time, startingTime, currentlyTaking, sun, mon, tues, wed, thurs, fri, sat)
 
     print("Query: " + query, file=sys.stdout)
     response = executePostQuery(query)
