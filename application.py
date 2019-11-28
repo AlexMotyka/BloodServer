@@ -132,6 +132,21 @@ def checkIfClientExists(email):
 		
 
 
+#def updateClient():
+#	clientId = request.form.get('clientId')
+##	oldvalue = request.form.get('oldvalue')
+#	newvalue = request.form.get('newvalue')
+#	
+#	if(type == 'name'){
+#		query = "UPDATE `bloodbase`.`Clients` SET `Name` = {}, WHERE ClientID = {};".format(newvalue, clientId);
+#	}
+#	else if(type == 'email'){
+#	
+#	}
+#	else if(type == 'password'){
+#	
+#	}
+
 
 def createBPActivity():
 
@@ -153,7 +168,7 @@ def getBP():
 
     clientID = request.args.get('clientID')
 
-    query = "SELECT * FROM bloodbase.BloodPressure WHERE ClientID = {}".format(clientID)
+    query = "SELECT Time, Systolic, Diastolic FROM bloodbase.BloodPressure WHERE ClientID = {}".format(clientID)
 
     response = executeGetQuery(query)
     return response
