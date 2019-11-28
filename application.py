@@ -192,7 +192,12 @@ def getMedicationNames():
     query = "SELECT MedName FROM bloodbase.MedSchedule WHERE ClientId = '{}';".format(clientId)
 
     response = executeGetQuery(query)
-
+    print("*************************LOGGED RESPONSE" + response, file=sys.stdout)
+    array = response
+    result = []
+    for element in array:
+        result.append(element[0])
+    print("***************LOGGED RESULT" + result, file=sys.stdout)
     return response
 
 def getMedicationDetails():
